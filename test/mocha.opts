@@ -1,0 +1,4 @@
+--ui bdd
+--recursive
+--exit
+--reporter logger/reporter.js

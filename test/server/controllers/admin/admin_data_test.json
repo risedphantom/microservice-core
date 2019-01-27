@@ -1,0 +1,24 @@
+{
+  "getPermissions": {"authenticated": true, "permissions": ["administrator"]},
+  "get_log_level": {
+    "error": null,
+    "result": "INFO",
+    "meta": {
+      "time": 0
+    }
+  },
+  "error_no_auth": {
+    "error": "NO_AUTH",
+    "result": null,
+    "meta": {
+      "time": 0
+    }
+  },
+  "success_ok": {
+    "error": null,
+    "result": "OK",
+    "meta": {
+      "time": 0
+    }
+  }
+}

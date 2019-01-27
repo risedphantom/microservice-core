@@ -1,0 +1,45 @@
+{
+  "get": "test_session",
+  "uuid": "00000000-0000-0000-0000-000000000000",
+  "hrtime": [0, 0],
+  "getTodo": {
+    "name": "TEST",
+    "description": "Do some work!"
+  },
+  "get_empty": null,
+  "getState": "test_state",
+  "getState_empty": null,
+  "getState_exception": {
+    "message": "READ_ERROR"
+  },
+  "getPermissions": {"authenticated": true, "permissions": ["administrator"]},
+  "cookie_empty": null,
+  "cookie_old_session": "session=test_session; Path=/",
+  "cookie_new_session": "session=00000000-0000-0000-0000-000000000000; Path=/",
+  "header_broken_data": "BROKEN_DATA",
+  "header_read_error": "READ_ERROR",
+  "success": {
+    "error": null,
+    "result": {
+      "name": "TEST",
+      "description": "Do some work!"
+    },
+    "meta": {
+      "time": 0
+    }
+  },
+  "error_broken_data": {
+    "error": "BROKEN_DATA",
+    "result": null,
+    "meta": {
+      "time": 0
+    }
+  },
+  "error_internal": {
+    "error": "READ_ERROR",
+    "result": null,
+    "meta": {
+      "time": 0
+    }
+  }
+}

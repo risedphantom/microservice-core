@@ -1,0 +1,86 @@
+{
+  // ****************
+  // Service settings
+  // ****************
+
+  "server": {
+    "port": 8080,
+    "address": "0.0.0.0"
+  },
+  "userAgent": "exCore",
+  "shutdownTimeout": 10000,
+  "nodeCache": {
+    "enabled": true,
+    "stdTTL": 3600
+  },
+  "logger": {
+    "level": "INFO",
+    "cron": "0 0 * * *",
+    "name": "exCore",
+    "type": "exCore",
+    "project": "EXCORE",
+    "stream": "default",
+    "useAls": true
+  },
+  "auth": {
+    "adminRoles": ["admin", "administrator"],
+    "guestRoles": ["guest", "any", "everyone", "all"]
+  },
+
+  // *****************
+  // Requests settings
+  // *****************
+
+  "sources": {
+    "jsonPlaceholder": {
+      "host": "https://jsonplaceholder.typicode.com",
+      "getUrl": "/todos/{id}"
+    }
+  },
+
+  // ****************
+  // Storage settings
+  // ****************
+
+  // Clients settings
+  "mongodb": {
+    "url": "mongodb://localhost",
+    "database": "microservice_core",
+    "options": {
+      "appname": "EXCORE"
+    }
+  },
+  "clients": {
+    "redis": {
+      "host": "127.0.0.1",
+      "port": 6379
+    }
+  },
+
+  // Stores
+  "stores": {
+    "entity1": {
+      "collectionName": "entity1"
+    },
+    "entity2": {
+      "keyEntity2": "entity2:"
+    },
+    "credentials": {
+      "collectionName": "credentials"
+    }
+  },
+
+  // **************
+  // Model settings
+  // **************
+
+  "models": {
+  },
+
+  // *************
+  // Core settings
+  // *************
+
+  "core": {
+  }
+}
