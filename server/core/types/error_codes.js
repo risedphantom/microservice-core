@@ -1,5 +1,6 @@
 module.exports = {
   NO_AUTH: 'NO_AUTH', // No auth cookies
+  NOT_FOUND: 'NOT_FOUND', // Method not found
   WRONG_AUTH: 'WRONG_AUTH', // Invalid auth cookies
   BROKEN_DATA: 'BROKEN_DATA', // Storage data is broken
   REDIS_ERROR: 'REDIS_ERROR', // Redis client error

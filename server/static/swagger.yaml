@@ -1,0 +1,427 @@
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: 'Описание API шаблона микросервиса exCore'
+  description: |
+    Это пример микросервиса, построенного на основе express фрэймворка. В документации описано 2 контроллера для администрирования сервиса и для демонстрации возможностей.
+servers:
+  - url: '{protocol}://{host}/excore'
+    variables:
+      protocol:
+        default: https
+      host:
+        default: example.com
+paths:
+  /admin/universe-answer:
+    get:
+      tags:
+        - Администрирование сервиса
+      summary: Ping метод
+      description: Ping метод для проверки отклика сервиса
+      responses:
+        '200':
+          $ref: '#/components/responses/200Ping'
+        '500':
+          $ref: '#/components/responses/Error'
+  /admin/log-level:
+    get:
+      tags:
+        - Администрирование сервиса
+      summary: Получить текущий уровень логирования
+      description: Получить текущий уровень логирования
+      security:
+        - basicAuth: []
+      responses:
+        '200':
+          $ref: '#/components/responses/200GetLogLevel'
+        '401':
+          $ref: '#/components/responses/401Permissions'
+        '500':
+          $ref: '#/components/responses/Error'
+    post:
+      tags:
+        - Администрирование сервиса
+      summary: Установить уровень логирования
+      description: Установить уровень логирования
+      security:
+        - basicAuth: []
+      requestBody:
+        required: true
+        content:
+          text/plain:
+            schema:
+              $ref: '#/components/schemas/logLevel'
+      responses:
+        '200':
+          $ref: '#/components/responses/200SetLogLevel'
+        '400':
+          $ref: '#/components/responses/400BadRequest'
+        '401':
+          $ref: '#/components/responses/401Permissions'
+        '500':
+          $ref: '#/components/responses/Error'
+  /sample/get-by-query-params:
+    get:
+      tags:
+        - Работа с платежами
+      security:
+        - basicAuth: []
+      summary: Список доступных шлюзов
+      description: Получить список доступных платежных шлюзов
+      parameters:
+        - in: query
+          name: id
+          schema:
+            type: string
+          required: true
+          description: Идентификатор
+      responses:
+        '200':
+          $ref: '#/components/responses/200GetByQueryParams'
+        '400':
+          $ref: '#/components/responses/400BadRequest'
+        '401':
+          $ref: '#/components/responses/401Permissions'
+        '422':
+          $ref: '#/components/responses/422Unprocessable'
+        '500':
+          $ref: '#/components/responses/Error'
+components:
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+  schemas:
+    200GetLogLevel:
+      title: Ответ от сервера
+      type: object
+      properties:
+        error:
+          type: string
+          description: Описание ошибки
+          enum:
+            - null
+        result:
+          type: string
+          description: Тело ответа
+          enum:
+            - TRACE
+            - DEBUG
+            - WARN
+            - INFO
+            - ERROR
+            - FATAL
+        meta:
+          type: object
+          description: Дополнительные метаданные
+          properties:
+            time:
+              type: number
+              description: Длительность выполнения
+    200GetByQueryParams:
+      title: Запрос выполнен
+      type: object
+      properties:
+        error:
+          type: string
+          description: Описание ошибки
+          enum:
+            - null
+        result:
+          type: object
+          description: Тело ответа
+        meta:
+          type: object
+          description: Дополнительные метаданные
+          properties:
+            time:
+              type: number
+              description: Длительность выполнения
+      example:
+        error: null
+        result:
+          userId: 1
+          id: 1
+          title: delectus aut autem
+          completed: false
+        meta:
+          time: 10
+    200SetLogLevel:
+      title: Уровень логирования установлен
+      type: object
+      properties:
+        error:
+          type: string
+          description: Описание ошибки
+          enum:
+            - null
+        result:
+          type: string
+          description: Тело ответа
+          enum:
+            - OK
+        meta:
+          type: object
+          description: Дополнительные метаданные
+          properties:
+            time:
+              type: number
+              description: Длительность выполнения
+    logLevel:
+      title: Уровень логирования
+      type: string
+      enum:
+        - TRACE
+        - DEBUG
+        - WARN
+        - INFO
+        - ERROR
+        - FATAL
+    200Ping:
+      title: Ping ответ от сервера
+      type: object
+      properties:
+        error:
+          type: string
+          description: Описание ошибки
+          enum:
+            - null
+        result:
+          type: number
+          description: Тело ответа
+          enum:
+            - 42
+        meta:
+          type: object
+          description: Дополнительные метаданные
+          properties:
+            time:
+              type: number
+              description: Длительность выполнения
+    400BadRequest:
+      title: Некорректное тело запроса или параметры запроса
+      type: object
+      properties:
+        error:
+          type: string
+          description: Человеческое описание ошибки
+          enum:
+            - INVALID_PARAM
+            - PARAM_REQUIRED
+            - PARAM_NOT_ALLOWED
+        result:
+          type: string
+          description: Тело ответа
+          enum:
+            - null
+        meta:
+          type: object
+          description: Дополнительные метаданные
+          properties:
+            time:
+              type: number
+              description: Длительность выполнения
+      example:
+        error: 'INVALID_PARAM: query.id'
+        result: null
+        meta:
+          time: 6
+    400BadRequest_text:
+      title: Некорректное тело запроса или параметры запроса
+      type: string
+      description: Тело ответа
+      example:
+        'INVALID_PARAM: query.id'
+    404NotFound:
+      title: Не найдено
+      type: object
+      properties:
+        error:
+          type: string
+          description: Человеческое описание ошибки
+          enum:
+            - NOT_FOUND
+        result:
+          type: string
+          description: Тело ответа
+          enum:
+            - null
+        meta:
+          type: object
+          description: Дополнительные метаданные
+          properties:
+            time:
+              type: number
+              description: Длительность выполнения
+      example:
+        error: 'NOT_FOUND'
+        result: null
+        meta:
+          time: 6
+    422Unprocessable:
+      title: При обработке запроса возникла ошибка, связанная с логикой
+      type: object
+      properties:
+        error:
+          type: string
+          description: Код ошибки
+          enum:
+            - BROKEN_DATA
+            - REDIS_ERROR
+            - PARAM_REQUIRED
+            - NOT_IMPLEMENTED
+            - PARAM_NOT_ALLOWED
+            - UNMET_CONDITIONS_ERROR
+        result:
+          type: string
+          description: Тело ответа
+          enum:
+            - null
+        meta:
+          type: object
+          description: Дополнительные метаданные
+          properties:
+            time:
+              type: number
+              description: Длительность выполнения
+      example:
+        error: 'UNMET_CONDITIONS_ERROR'
+        result: null
+        meta:
+          time: 6
+    422Unprocessable_text:
+      title: При обработке запроса возникла ошибка, связанная с логикой
+      type: string
+      description: Тело ответа
+      example:
+        NOT_FOUND
+    401Permissions:
+      title: Пользователь не авторизован
+      type: object
+      properties:
+        error:
+          type: string
+          description: Описание ошибки
+          enum:
+            - NO_AUTH
+            - WRONG_AUTH
+        result:
+          type: string
+          description: Тело ответа
+          enum:
+            - null
+        meta:
+          type: object
+          description: Дополнительные метаданные
+          properties:
+            time:
+              type: number
+              description: Длительность выполнения
+      example:
+        error: 'WRONG_AUTH'
+        result: null
+        meta:
+          time: 6
+    401Permissions_text:
+      title: Пользователь не авторизован
+      type: string
+      description: Тело ответа
+      example:
+        WRONG_AUTH
+    Error:
+      title: Неизвестная ошибка
+      type: object
+      properties:
+        error:
+          type: string
+          description: Человеческое описание ошибки
+        result:
+          type: string
+          description: Тело ответа
+          enum:
+            - null
+        meta:
+          type: object
+          description: Дополнительные метаданные
+          properties:
+            time:
+              type: number
+              description: Длительность выполнения
+      example:
+        error: Internal server error
+        result: null
+        meta:
+          time: 1
+    Error_text:
+      title: Неизвестная ошибка
+      type: string
+      description: Тело ответа
+      example:
+        Internal server error
+  responses:
+    200Ping:
+      description: Сервис работает
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/200Ping'
+    200GetLogLevel:
+      description: Текущий уровень логирования
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/200GetLogLevel'
+    200SetLogLevel:
+      description: Уровень логирования установлен
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/200SetLogLevel'
+    200GetByQueryParams:
+      description: Запрос выполнен
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/200GetByQueryParams'
+    401Permissions:
+      description: Пользователь не авторизован
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/401Permissions'
+        text/plain:
+          schema:
+            $ref: '#/components/schemas/401Permissions_text'
+    400BadRequest:
+      description: Некорректные параметры запроса
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/400BadRequest'
+        text/plain:
+          schema:
+            $ref: '#/components/schemas/400BadRequest_text'
+    404NotFound:
+      description: Не найдено
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/404NotFound'
+    422Unprocessable:
+      description: Внутренняя ошибка
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/422Unprocessable'
+        text/plain:
+          schema:
+            $ref: '#/components/schemas/422Unprocessable_text'
+    Error:
+      description: Неизвестная ошибка
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+        text/plain:
+          schema:
+            $ref: '#/components/schemas/Error_text'

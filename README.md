@@ -1,1 +1,1 @@
-# microservice-core
+# exCore - express-based microservice template
